@@ -4,6 +4,7 @@
 
 const int trig = 12; //pin 12 linked to trig
 const int echo = 11; //pin 11 linked to echo
+const int buzzer = 4; //pin 4 linked to the piezo transducer
 
 int distance = 0;
 int duration = 0;
@@ -12,6 +13,7 @@ void setup()
 {
     pinMode(trig, OUTPUT); //used to find the distance to the obstacle
     pinMode(echo, INPUT); //used to find the distance to the obstacle
+    pinMode(buzzer, OUTPUT); //set pin 4 to the sound output
     Serial.begin(9600);
 }
 
@@ -29,7 +31,10 @@ void loop()
     {
         //HERE STOP THE DC MOTOR
     
-        //PLAY HONK SOUND       
+        tone(buzzer, 250); //send a 250 hertz signal to the buzzer (honk)
+        delay(3000); //makes the 250 hertz sound last 3 seconds
+        noTone(buzzer); //makes the sound stop
+        delay(1000);
     }
     else
     {
