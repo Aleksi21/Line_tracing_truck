@@ -1,0 +1,16 @@
+//TO ADD TO THE ULTRASONIC SENSOR
+
+const int buzzer = 4; //pin 4 linked to the piezo transducer
+
+void setup()
+{
+  pinMode(buzzer, OUTPUT); //set pin 4 to the sound output
+}
+
+void loop()
+{
+  tone(buzzer, 250); //send a 250 hertz signal to the buzzer
+  delay(1000); //makes the 250 hertz sound last 1 second
+  noTone(buzzer); //makes the sound stop
+  delay(1000); //makes the sound stop for 1 second
+}
