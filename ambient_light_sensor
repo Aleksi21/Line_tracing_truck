@@ -1,0 +1,23 @@
+void setup()
+{
+  Serial.begin(9600); 
+  pinMode(13, OUTPUT); //Configuring the specific pin to behave as an input or an output
+  pinMode(12, OUTPUT); //Configuring the specific pin to behave as an input or an output
+  pinMode(A2, INPUT); //Configuring the specific pin to behave as an input or an output
+}
+
+void loop()
+{
+  int Light = analogRead(A2); 
+  Serial.println(Light); //Test for the correct light level
+  if (Light > 950) //If the light level is low turning lights on
+  {
+    digitalWrite(12, HIGH);
+    digitalWrite(13, HIGH);
+  }
+  else //If the light level is high turning lights off
+  {
+    digitalWrite(12, LOW);
+    digitalWrite(13, LOW);
+  }
+}
