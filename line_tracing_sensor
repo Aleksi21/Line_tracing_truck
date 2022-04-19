@@ -1,0 +1,35 @@
+#include <RedBot.h>
+
+RedBotSensor left_sen = RedBotSensor(A3); //Configuring the specific output to a variable
+RedBotSensor right_sen = RedBotSensor(A4); //Configuring the specific output to a variable
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(11, OUTPUT); //Test output for the DC motor
+}
+void loop()
+{
+   if(left_sen.read() > 1 && right_sen.read() > 1) //Stop
+   {
+   analogWrite(11,0); //Turning the DC motor off
+   }
+   else if(left_sen.read() > 1 && right_sen.read() < 1) //Turn left
+   {
+   //Servo turn left
+   analogWrite(11,100); //Turning the DC motor on
+   }
+   else if(left_sen.read() < 1 && right_sen.read() > 1) //Turn right
+   {
+   //Servo turn right
+   analogWrite(11,100); //Turning the DC motor on
+   }
+   else if(left_sen.read() < 1 && right_sen.read() < 1) //Forward
+   {
+    analogWrite(11,100); //Turning the DC motor on
+   }
+   else
+   {
+    continue;
+   }
+}
