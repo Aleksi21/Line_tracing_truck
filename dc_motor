@@ -1,0 +1,9 @@
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(11, OUTPUT); //Configuring the specific pin to behave as an input or an output
+}
+void loop() //Using the DC motor
+{
+   analogWrite(11,2);
+}
