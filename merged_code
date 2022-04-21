@@ -1,0 +1,104 @@
+/*
+ * NOTES:
+ * The mechanism for turning using the servo motor needs to be added!
+ */
+
+
+#include <RedBot.h>
+
+int dc_speed_moving = 100;  //speed of DC motor when moving
+int dc_speed_stopped = 0;  //speed of DC motor when stopped
+int distance = 0;
+int duration = 0;
+int Light = analogRead(A2);  //input for the ambient light sensor
+RedBotSensor left_sen = RedBotSensor(A3); //configuring the left line tracking sensor as an input
+RedBotSensor right_sen = RedBotSensor(A4); //configuring the right line tracking sensor as an input
+const int buzzer = 4; //pin 4 linked to the piezo transducer
+const int echo = 6; //pin linked to echo
+const int trig = 7; //pin linked to trig
+const int dc_motor_pin = 11;  //pin linked to DC motor
+const int left_light_pin = 12;  //pin linked to left light
+const int right_light_pin = 13;  //pin linked to right light
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(dc_motor_pin, OUTPUT); //output for the DC motor
+  pinMode(left_light_pin, OUTPUT); //output for the left light
+  pinMode(right_light_pin, OUTPUT); //output for the right light
+  pinMode(Light, INPUT); //input for the ambient light sensor
+  pinMode(trig, OUTPUT); //used to find the distance to the obstacle
+  pinMode(echo, INPUT); //used to find the distance to the obstacle
+  pinMode(buzzer, OUTPUT); //set pin 4 to the sound output
+}
+
+void loop()
+{
+   lights();
+   obstacle();
+   if(left_sen.read() > 1 && right_sen.read() > 1) //stops the car when there is only black
+   {
+   Stop();
+   }
+   else if(left_sen.read() > 1 && right_sen.read() < 1) //turns left when right sensor is on black and left sensor is not
+   {
+   left();
+   }
+   else if(left_sen.read() < 1 && right_sen.read() > 1) //turns right when left sensor is on black and right sensor is not
+   {
+   right();
+   }
+   else if(left_sen.read() < 1 && right_sen.read() < 1) //goes forward when sensors only read white
+   {
+    forward();
+   }
+}
+
+void forward()  //function for going forward
+{
+  analogWrite(dc_motor_pin, dc_speed_moving);
+}
+void Stop() //function for stopping
+{
+  analogWrite(dc_motor_pin, dc_speed_stopped);
+}
+void right() //function for turning right
+{
+  
+}
+void left() //function for turning left
+{
+  
+}
+void lights() //function for the lights
+{
+    if (Light > 950) //If the light level is low turning lights on
+  {
+    digitalWrite(left_light_pin, HIGH);
+    digitalWrite(right_light_pin, HIGH);
+  }
+  else //If the light level is high turning lights off
+  {
+    digitalWrite(left_light_pin, LOW);
+    digitalWrite(right_light_pin, LOW);
+  }
+}
+void obstacle() //function for avoiding an obstacle
+{
+    digitalWrite(trig, LOW);
+    delayMicroseconds(2);
+    digitalWrite(trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig, LOW);
+    duration = pulseIn(echo, HIGH);
+    distance = (duration*0.034/2);
+
+    if(distance < 50) //obstacle in front of the truck
+    {
+        Stop();
+        tone(buzzer, 250); //send a 250 hertz signal to the buzzer (honk)
+        delay(3000); //makes the 250 hertz sound last 3 seconds
+        noTone(buzzer); //makes the sound stop
+        delay(1000);
+    }
+}
